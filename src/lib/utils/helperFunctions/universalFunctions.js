@@ -251,12 +251,20 @@ export const getTeamFromTeamManagers = (teamManagers, rosterID, year) => {
 }
 
 export const getNestedTeamNamesFromTeamManagers = (teamManagers, year, rosterID) => {
-    const originalName = teamManagers.teamManagersMap[year][rosterID]['team']['name'];
-    const currentName = teamManagers.teamManagersMap[teamManagers.currentSeason][rosterID]['team']['name'];
-    if(cleanName(originalName) != cleanName(currentName)) {
+    console.log(teamManagers.teamManagersMap[year], rosterID);
+    try {
+      const originalName = teamManagers.teamManagersMap[year][rosterID]["team"]["name"];
+      console.log("Original Name:", originalName);
+      const currentName = teamManagers.teamManagersMap[teamManagers.currentSeason][rosterID]["team"]["name"];
+      console.log("Current Name:", currentName);
+      if (cleanName(originalName) != cleanName(currentName)) {
         return `${originalName}<div class="curOwner">(${currentName})</div>`;
+      }
+      return originalName;
+    } catch (e) {
+      console.error("Error getting nested team names:", e);
+      return "Unknown Team";
     }
-    return originalName;
 }
 
 export const getDatesActive = (teamManagers, managerID) => {

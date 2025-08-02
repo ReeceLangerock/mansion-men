@@ -6,54 +6,61 @@ import { getManagers, getTeamData } from './universalFunctions';
 import { getLeagueData } from './leagueData';
 
 export const getLeagueTeamManagers = async () => {
-    if(get(teamManagersStore) && get(teamManagersStore).currentSeason) {
-		return get(teamManagersStore);
-	}
-    let currentLeagueID = leagueID;
-	let teamManagersMap = {};
-    let finalUsers = {};
-    let currentSeason = null;
+  if (get(teamManagersStore) && get(teamManagersStore).currentSeason) {
+    return get(teamManagersStore);
+  }
+  let currentLeagueID = leagueID;
+  let teamManagersMap = {};
+  let finalUsers = {};
+  let currentSeason = null;
 
-    // loop through all seasons and create a [year][roster_id]: team, managers object
-	while(currentLeagueID && currentLeagueID != 0) {
-		const [usersRaw, leagueData, rostersRaw] = await waitForAll(
-            fetch(`https://api.sleeper.app/v1/league/${currentLeagueID}/users`, {compress: true}),
-			getLeagueData(currentLeagueID),
-            fetch(`https://api.sleeper.app/v1/league/${currentLeagueID}/rosters`, {compress: true}),
-        ).catch((err) => { console.error(err); });
+  // loop through all seasons and create a [year][roster_id]: team, managers object
+  while (currentLeagueID && currentLeagueID != 0) {
+    const [usersRaw, leagueData, rostersRaw] = await waitForAll(
+      fetch(`https://api.sleeper.app/v1/league/${currentLeagueID}/users`, { compress: true }),
+      getLeagueData(currentLeagueID),
+      fetch(`https://api.sleeper.app/v1/league/${currentLeagueID}/rosters`, { compress: true })
+    ).catch((err) => {
+      console.error(err);
+    });
 
-        const [users, rosters] = await waitForAll(
-            usersRaw.json(), 
-            rostersRaw.json(), 
-        ).catch((err) => { console.error(err); });
+    const [users, rosters] = await waitForAll(usersRaw.json(), rostersRaw.json()).catch((err) => {
+      console.error(err);
+    });
 
-        const year = parseInt(leagueData.season);
-        currentLeagueID = leagueData.previous_league_id;
-        if(!currentSeason) {
-            currentSeason = year;
-        }
-        teamManagersMap[year] = {};
-        const processedUsers = processUsers(users);
-
-        // in order to not overwrite most recent data, only add new entries to finalUsers
-        for(const processedUserKey in processedUsers) {
-            if(finalUsers[processedUserKey]) continue;
-            finalUsers[processedUserKey] = processedUsers[processedUserKey];
-        }
-        for(const roster of rosters) {
-            teamManagersMap[year][roster.roster_id] = {
-                team: getTeamData(processedUsers, roster.owner_id),
-                managers: getManagers(roster, processedUsers),
-            };
-        }
+    const year = parseInt(leagueData.season);
+    currentLeagueID = leagueData.previous_league_id;
+    if (!currentSeason) {
+      currentSeason = year;
     }
-    const response = {
-        currentSeason,
-        teamManagersMap,
-        users: finalUsers,
+    teamManagersMap[year] = {};
+    const processedUsers = processUsers(users);
+
+    // in order to not overwrite most recent data, only add new entries to finalUsers
+    for (const processedUserKey in processedUsers) {
+      if (finalUsers[processedUserKey]) continue;
+      finalUsers[processedUserKey] = processedUsers[processedUserKey];
     }
-    teamManagersStore.update(() => response);
-    return response;
+    for (const roster of rosters) {
+      teamManagersMap[year][roster.roster_id] = {
+        team: getTeamData(processedUsers, roster.owner_id),
+        managers: getManagers(roster, processedUsers),
+      };
+    }
+  }
+  const response = {
+    currentSeason,
+    teamManagersMap,
+    users: finalUsers,
+  };
+
+  // supplement teamManagersMap with ESPN data
+  response.teamManagersMap[2024] = response.teamManagersMap[2025];
+  response.teamManagersMap[2023] = response.teamManagersMap[2025];
+
+  teamManagersStore.update(() => response);
+
+  return response;
 }
 
 const processUsers = (rawUsers) => {

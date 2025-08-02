@@ -8,7 +8,7 @@
     import ManagerFantasyInfo from './ManagerFantasyInfo.svelte';
     import ManagerAwards from './ManagerAwards.svelte';
     import { onMount } from 'svelte';
-	import { getDatesActive, getRosterIDFromManagerID, getTeamNameFromTeamManagers } from '$lib/utils/helperFunctions/universalFunctions';
+	import { getAvatarFromTeamManagers, getDatesActive, getRosterIDFromManagerID, getTeamNameFromTeamManagers } from '$lib/utils/helperFunctions/universalFunctions';
 
     export let manager, managers, rostersData, leagueTeamManagers, rosterPositions, transactionsData, awards, records;
 
@@ -24,6 +24,12 @@
     $: ({rosterID, year} = viewManager.managerID ? getRosterIDFromManagerID(leagueTeamManagers, viewManager.managerID) : {rosterID: viewManager.roster, year: null});
 
     $: teamTransactions = transactions.filter(t => t.rosters.includes(parseInt(rosterID)));
+
+    // // get avatar from team managers if available
+    $: avatar = viewManager.managerID && leagueTeamManagers.users[viewManager.managerID]?.avatar
+    ? `https://sleepercdn.com/avatars/thumbs/${leagueTeamManagers.users[viewManager.managerID].avatar}`
+    : '/default-avatar.png'; // fallback if not found
+
 
     $: roster = rosters[rosterID];
 
@@ -62,6 +68,7 @@
         manager = newManager;
         goto(`/manager?manager=${newManager}`, {noscroll});
     }
+
 </script>
 
 <style>
@@ -224,7 +231,7 @@
 
 <div class="managerContainer">
     <div class="managerConstrained">
-        <img class="managerPhoto" src="{viewManager.photo}" alt="manager"/>
+        <img class="managerPhoto" src="{avatar}" alt="manager"/>
         <h2>
             {viewManager.name}
             <div class="teamSub">{coOwners ? 'Co-' : ''}Manager of <i>{getTeamNameFromTeamManagers(leagueTeamManagers, rosterID, year)}</i></div>

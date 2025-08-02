@@ -32,11 +32,11 @@
     	margin: 0 auto;
 	}
 	nav {
-		background-color: var(--fff);
+		background-color: hsl(349.88deg 53.55% 30.39%);
 		position: relative;
 		z-index: 2;
-		border-bottom: 1px solid #00316b;
-		box-shadow: 0 0 8px 0 #00316b;
+		border-bottom: 1px solid hsl(349.88deg 53.55% 25.39%);
+		box-shadow: 0 0 8px 0 hsl(349.88deg 53.55% 20.39%);
 	}
 
 	#logo {
