@@ -1,0 +1,62 @@
+// const teams = [
+//   {
+//     rosterId: 1,
+//     name: "House of the Rising Sun",
+//     managerId: "1239479774083022848",
+//   },
+//   {
+//     rosterId: 2,
+//     name: "Sean",
+//     managerId: "1247988888438325248",
+//   },
+//   {
+//     rosterId: 3,
+//     name: "Matt",
+//     managerId: "855578400897748992",
+//   },
+//   {
+//     rosterId: 4,
+//     name: "Ouska",
+//     managerId: "1121577189486465024",
+//   },
+//   {
+//     rosterId: 5,
+//     name: "Bryan",
+//     managerId: "1247996381205889024",
+//   },
+//   {
+//     rosterId: 6,
+//     name: "Reece",
+//     managerId: "474645081496743936",
+//   },
+//   {
+//     rosterId: 7,
+//     name: "Kevin",
+//     managerId: "463061456946982912",
+//   },
+//   {
+//     rosterId: 8,
+//     name: "Ryan",
+//     managerId: "1248303856278843392",
+//   },
+//   {
+//     rosterId: 9,
+//     name: "Jason",
+//     managerId: "1248311134419693568",
+//   },
+//   {
+//     rosterId: 10,
+//     name: "Cornsauce",
+//     managerId: "1133460598408220672",
+//   },
+//   {
+//     rosterId: 11,
+//     name: "Trey",
+//     managerId: "1248349576952291328",
+//   },
+//   {
+//     rosterId: 12,
+//     name: "J.D.",
+//     managerId: "727020110195277824",
+//   },
+// ];

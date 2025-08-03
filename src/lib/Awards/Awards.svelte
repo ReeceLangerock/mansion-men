@@ -1,380 +1,410 @@
 <script>
     import { gotoManager } from '$lib/utils/helper';
-	import { getAvatarFromTeamManagers, getNestedTeamNamesFromTeamManagers } from '$lib/utils/helperFunctions/universalFunctions';
-	export let podium, leagueTeamManagers;
+    import { getAvatarFromTeamManagers, getNestedTeamNamesFromTeamManagers } from '$lib/utils/helperFunctions/universalFunctions';
 
-	const { year, champion, second, third, divisions, toilet } = podium;
+    export let podium, leagueTeamManagers;
+
+    const { year, champion, second, third, divisions, toilet } = podium;
 </script>
 
 <style>
-	* {
-		color: var(--g555);
-	}
+    * {
+        color: var(--g555);
+    }
 
-	h3 {
-		margin: 2.5em 0 1.5em;
-	}
+    .awards-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 12px;
+		padding-bottom: 32px;
+		border-bottom: 2px solid var(--bbb);
+    }
 
-	.awards {
-		display: block;
-		position: relative;
-		width: 100%;
-		z-index: 1;
-	}
+    .awards-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
-	#podium {
-		width: 600px;
-		height: 500px;
-		position: relative;
-		margin: 10px auto 30px;
-	}
+    .awards-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #772432, #772432, #772432);
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 0.5rem;
+		color: var(--secondaryColor, #8b6e4a);
 
-	.podiumImage {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		height: auto;
-		z-index: 3;
-	}
+    }
 
-	.champ {
-		position: absolute;
-		width: 20%;
-		height: auto;
-		transform: translate(-50%, -50%);
-		border-radius: 100%;
-		border: 1px solid var(--bbb);
-		background-color: var(--fff);
-	}
+    .awards-subtitle {
+        font-size: 1.1rem;
+		color: var(--secondaryColor, #8b6e4a);
 
-	.laurel {
-		position: absolute;
-		width: 33%;
-		height: auto;
-		transform: translate(-50%, -50%);
-		bottom: 56.6%;
-		left: 50%;
-		pointer-events: none;
-	}
+    }
 
-	.first {
-		bottom: 70%;
-		left: 50%;
-	}
+    /* Podium Section */
+    .podium-section {
+        margin-bottom: 3rem;
 
-	.second {
-		bottom: 43%;
-		left: 20%;
-	}
+    }
 
-	.third {
-		bottom: 39%;
-		left: 80%;
-	}
+    .podium-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 1.5rem;
+        max-width: 700px;
+        margin: 0 auto;
+    }
 
-	h3 {
-		text-align: center;
-	}
-
-	.leaderBlock {
-		position: relative;
-		width: 80px;
-		height: 119px;
-		margin: 15px auto;
-	}
-
-	.divisions {
-		display: flex;
-		justify-content: space-around;
-	}
-
-	.divisionLeader {
-		position: absolute;
-		width: 70px;
-		height: 70px;
-		transform: translate(-50%, 0%);
-		top: 0;
-		left: 50%;
-		border-radius: 100%;
-		border: 1px solid var(--bbb);
-		background-color: var(--fff);
-		z-index: 3;
-	}
-
-	.medal {
-		position: absolute;
-		width: 40px;
-		height: auto;
-		transform: translate(-50%, 0%);
-		bottom: 0;
-		left: 50%;
-		z-index: 2;
-	}
-
-	.toiletBowl {
-		position: relative;
-		width: 215px;
-		height: 190px;
-		margin: 10px auto;
-	}
-
-	.toiletWinner {
-		position: absolute;
-		width: 65px;
-		height: 65px;
-		transform: translate(-50%, 0%);
-		top: 20px;
-		left: 55%;
-		border-radius: 100%;
-		border: 1px solid var(--bbb);
-		z-index: 3;
-	}
-
-	.toilet {
-		position: absolute;
-		width: 100%;
-		height: auto;
-		transform: translate(-50%, 0%);
-		bottom: 0;
-		left: 50%;
-	}
-
-	.label {
-		white-space: nowrap;
-		line-height: 1.1em;
-		text-align: center;
-		min-height: 34px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		position: absolute;
-		transform: translate(-50%, -50%);
-		padding: 6px 30px;
-		background-color: var(--fff);
-		border: 1px solid var(--bbb);
+    .podium-card {
+        background: var(--fff);
+        border-radius: 16px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid var(--bbb);
+        transition: all 0.3s ease;
+        cursor: pointer;
         box-shadow: 0px 3px 3px -2px var(--boxShadowOne), 0px 3px 4px 0px var(--boxShadowTwo), 0px 1px 8px 0px var(--boxShadowThree);
-	}
+    }
 
-	.firstLabel {
-		bottom: 60%;
-		left: 50%;
-	}
+    .podium-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--g555);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
 
-	.secondLabel {
-		bottom: 40%;
-		left: 20%;
-	}
+    .podium-card.second {
+        order: 1;
+    }
 
-	.thirdLabel {
-		bottom: 36%;
-		left: 80%;
-	}
+    .podium-card.first {
+        order: 2;
+        transform: scale(1.1);
+        border: 3px solid #ffd700;
+        background: linear-gradient(135deg, #fffbeb, #fef3c7);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0px 6px 6px -4px var(--boxShadowOne), 0px 6px 8px 0px var(--boxShadowTwo), 0px 2px 16px 0px var(--boxShadowThree);
+        position: relative;
+    }
 
-	.genLabel {
-		white-space: nowrap;
-		line-height: 1.1em;
-		min-height: 34px;
-		display: inline-flex;
-		flex-direction: column;
-		justify-content: center;
-		text-align: center;
-		margin: 15px auto 20px;
-		padding: 6px 30px;
-		background-color: var(--fff);
-		border: 1px solid var(--bbb);
-		box-shadow: 0px 3px 3px -2px var(--boxShadowOne), 0px 3px 4px 0px var(--boxShadowTwo), 0px 1px 8px 0px var(--boxShadowThree);
-	}
+    .podium-card.first::before {
+        content: '';
+        position: absolute;
+        top: -3px;
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        background: linear-gradient(45deg, #8b6e4a, #ffed4e, #ffd700, #8b6e4a);
+        border-radius: 16px;
+        z-index: -1;
+        animation: borderGlow 3s ease-in-out infinite alternate;
+    }
 
-	.division {
-		text-align: center;
-	}
+    @keyframes borderGlow {
+        0% { opacity: 0.6; }
+        100% { opacity: 1; }
+    }
 
-	.toiletParent {
-		width: 100%;
-		text-align: center;
-		padding: 25px 0 40px;
-		margin-top: 30px;
-		box-shadow: 0 12px 9px -12px rgba(0,0,0,0.4);
-	}
+    .podium-card.first:hover {
+        transform: scale(1.1) translateY(-5px);
+    }
 
-	.banner {
-		display: block;
-		width: 65%;
-		max-width: 450px;
-		margin: 20px auto 0;
-	}
+    .podium-card.third {
+        order: 3;
+    }
 
-	.toilet-banner {
-		display: block;
-		width: 50%;
-		max-width: 350px;
-		margin: 20px auto 0;
-	}
+    .podium-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: block;
+        object-fit: cover;
+        border: 3px solid transparent;
+        background-color: var(--fff);
+        border-color: #ffd700;
 
-	.clickable {
-		cursor: pointer;
-	}
+    }
 
-	:global(.curOwner) {
-		font-size: 0.75em;
-		color: var(--bbb);
-		font-style: italic;
-	}
+    .podium-card.first .podium-avatar {
+        width: 80px;
+        height: 80px;
+    }
 
-	@media (max-width: 680px) {
-		.label {
-			padding: 6px 8px;
-		}
-		.genLabel {
-			padding: 6px 8px;
-		}
-	}
 
-	@media (max-width: 630px) {
-		.label {
-			font-size: 0.9em;
-		}
-		.genLabel {
-			font-size: 0.9em;
-		}
-	}
+    .podium-rank {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        font-weight: bold;
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
 
-	@media (max-width: 610px) {
-		#podium {
-			width: 500px;
-			height: 417px;
-			position: relative;
-			margin: 10px auto 30px;
-		}
+    .podium-card.first .podium-rank {
+        background: #ffd700;
+        color: #000;
+    }
 
-		.firstLabel {
-			bottom: 58%;
-		}
+    .podium-card.second .podium-rank {
+        background: #c0c0c0;
+        color: #000;
+    }
 
-		.secondLabel {
-			bottom: 35%;
-		}
+    .podium-card.third .podium-rank {
+        background: #cd7f32;
+        color: #fff;
+    }
 
-		.thirdLabel {
-			bottom: 31%;
-		}
-	}
+    .podium-name {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: var(--g555);
+    }
 
-	@media (max-width: 535px) {
-		.label {
-			font-size: 0.8em;
-		}
-		.genLabel {
-			font-size: 0.8em;
-		}
-	}
+    .podium-subtitle {
+		color: var(--secondaryColor, #8b6e4a);
 
-	@media (max-width: 520px) {
-		.label {
-			font-size: 0.7em;
-			padding: 2px 4px;
-		}
-		.genLabel {
-			font-size: 0.7em;
-			padding: 2px 4px;
-		}
-	}
+        font-size: 0.8rem;
+    }
 
-	@media (max-width: 510px) {
-		#podium {
-			width: 400px;
-			height: 333px;
-		}
-	}
+    /* Division Leaders */
+    .divisions-section {
+        margin-bottom: 3rem;
+    }
 
-	@media (max-width: 425px) {
-		.label {
-			font-size: 0.6em;
-		}
-		.genLabel {
-			font-size: 0.6em;
-		}
-	}
+    .section-title {
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        color: var(--g555);
+    }
 
-	@media (max-width: 410px) {
-		#podium {
-			width: 300px;
-			height: 250px;
-		}
+    .divisions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
 
-		.firstLabel {
-			bottom: 53%;
-		}
+    .division-card {
+        background: var(--fff);
+        border-radius: 12px;
+        padding: 1.5rem;
+        text-align: center;
+        border: 1px solid var(--bbb);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        box-shadow: 0px 2px 2px -1px var(--boxShadowOne), 0px 2px 3px 0px var(--boxShadowTwo), 0px 1px 6px 0px var(--boxShadowThree);
+    }
 
-		.secondLabel {
-			bottom: 31%;
-		}
+    .division-card:hover {
+        transform: translateY(-3px);
+        border-color: var(--g555);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
 
-		.thirdLabel {
-			bottom: 27%;
-		}
-	}
+    .division-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        display: block;
+        object-fit: cover;
+        border: 2px solid #10b981;
+        background-color: var(--fff);
+    }
 
-	@media (max-width: 329px) {
-		.label {
-			font-size: 0.5em;
-		}
-		.genLabel {
-			font-size: 0.5em;
-		}
-	}
+    .division-title {
+        font-size: 0.9rem;
+        color: #10b981;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .division-name {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.25rem;
+        color: var(--g555);
+    }
+
+    /* Toilet Bowl */
+    .toilet-section {
+        background: linear-gradient(135deg, #404040, #404040);
+        border-radius: 12px;
+        padding: 1rem;
+        text-align: center;
+        max-width: 300px;
+        margin: 0 auto;
+        border: 1px solid #772432;
+        box-shadow: 0px 3px 3px -2px var(--boxShadowOne), 0px 3px 4px 0px var(--boxShadowTwo), 0px 1px 8px 0px var(--boxShadowThree);
+    }
+
+    .toilet-title {
+        font-size: 1.1rem;
+        color: #fff;
+        margin: 0rem;
+        font-weight: 600;
+    }
+
+    .toilet-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        margin: 0 auto 0.75rem;
+        display: block;
+        object-fit: cover;
+        border: 2px solid #dc2626;
+        background-color: var(--fff);
+        cursor: pointer;
+    }
+
+    .toilet-name {
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--g555);
+        cursor: pointer;
+        margin-bottom: 0.25rem;
+    }
+
+    .toilet-subtitle {
+        color: #dc2626;
+        font-size: 0.8rem;
+    }
+
+    .clickable {
+        cursor: pointer;
+    }
+
+    :global(.curOwner) {
+        font-size: 0.7em;
+        color: var(--bbb);
+        font-style: italic;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .podium-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .podium-card.first {
+            order: 1;
+            transform: none;
+        }
+
+        .podium-card.first:hover {
+            transform: translateY(-5px);
+        }
+
+        .podium-card.second {
+            order: 2;
+        }
+
+        .podium-card.third {
+            order: 3;
+        }
+
+        .divisions-grid {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .awards-title {
+            font-size: 2rem;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .awards-title {
+            font-size: 1.8rem;
+        }
+
+        .podium-card {
+            padding: 1rem;
+        }
+
+        .division-card {
+            padding: 1rem;
+        }
+
+        .toilet-section {
+            padding: 1.5rem;
+        }
+    }
 </style>
 
-<div class="awards">
-	<h3>{year} Awards</h3>
+<div class="awards-container">
+    <!-- Header -->
+    <div class="awards-header">
+        <h1 class="awards-title">{year} Awards</h1>
+        <p class="awards-subtitle">League Champions and Division Leaders</p>
+    </div>
 
-	<img src="/banner.png" class="banner" alt="The Champion's Cup" />
+    <!-- Podium Section -->
+    <div class="podium-section">
+        <div class="podium-grid">
+            <div class="podium-card second clickable" on:click={() => gotoManager({year, leagueTeamManagers, rosterID: second})}>
+                <div class="podium-rank">2</div>
+                <img src="{getAvatarFromTeamManagers(leagueTeamManagers, second, year)}" alt="Second Place" class="podium-avatar">
+                <div class="podium-name">{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, second)}</div>
+                <div class="podium-subtitle">Runner-up</div>
+            </div>
+            
+            <div class="podium-card first clickable" on:click={() => gotoManager({year, leagueTeamManagers, rosterID: champion})}>
+                <div class="podium-rank">1</div>
+                <img src="{getAvatarFromTeamManagers(leagueTeamManagers, champion, year)}" alt="Champion" class="podium-avatar">
+                <div class="podium-name">{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, champion)}</div>
+                <div class="podium-subtitle">🏆 Champion</div>
+            </div>
+            
+            <div class="podium-card third clickable" on:click={() => gotoManager({year, leagueTeamManagers, rosterID: third})}>
+                <div class="podium-rank">3</div>
+                <img src="{getAvatarFromTeamManagers(leagueTeamManagers, third, year)}" alt="Third Place" class="podium-avatar">
+                <div class="podium-name">{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, third)}</div>
+                <div class="podium-subtitle">Third Place</div>
+            </div>
+        </div>
+    </div>
 
-	<div id="podium">
-		<img src="/podium.png" class="podiumImage" alt="podium" />
+    <!-- Division Leaders -->
+    {#if divisions && divisions.length > 0}
+        <div class="divisions-section">
+            <h2 class="section-title">Division Champions</h2>
+            <div class="divisions-grid">
+                {#each divisions as division}
+                    {#if division.rosterID}
+                        <div class="division-card clickable" on:click={() => gotoManager({year, leagueTeamManagers, rosterID: division.rosterID})}>
+                            <img src="{getAvatarFromTeamManagers(leagueTeamManagers, division.rosterID, year)}" alt="{division.name} champion" class="division-avatar">
+                            <div class="division-title">
+                                {#if division.name}
+                                    {division.name} Division
+                                {:else}
+                                    Regular Season Champion
+                                {/if}
+                            </div>
+                            <div class="division-name">{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, division.rosterID)}</div>
+                        </div>
+                    {/if}
+                {/each}
+            </div>
+        </div>
+    {/if}
 
-		<!-- champs -->
-		<img src="{getAvatarFromTeamManagers(leagueTeamManagers, champion, year)}" class="first champ clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: champion})} alt="champion" />
-		<img src="/laurel.png" class="laurel" alt="laurel" />
-		<span class="label firstLabel clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: champion})}>{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, champion)}</span>
-
-		<img src="{getAvatarFromTeamManagers(leagueTeamManagers, second, year)}" class="second champ clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: second})} alt="2nd" />
-		<span class="label secondLabel clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: second})}>{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, second)}</span>
-
-		<img src="{getAvatarFromTeamManagers(leagueTeamManagers, third, year)}" class="third champ clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: third})} alt="3rd" />
-		<span class="label thirdLabel clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: third})}>{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, third)}</span>
-	</div>
-	<div class="divisions">
-		{#each divisions as division}
-			{#if division.rosterID}
-				<div class="division">
-					{#if division.name}
-						<h6>{division.name} Division</h6>
-					{:else}
-						<h6>Regular Season Champion</h6>
-					{/if}
-					<div class="leaderBlock">
-						<img src="{getAvatarFromTeamManagers(leagueTeamManagers, division.rosterID, year)}" class="divisionLeader clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: division.rosterID})} alt="{division.name} champion" />
-						<img src="/medal.png" class="medal" alt="champion" />
-					</div>
-					<span class="genLabel clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: division.rosterID})}>{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, division.rosterID)}</span>
-				</div>
-			{/if}
-		{/each}
-	</div>
-
-		<!-- Toilet Bowl -->
-	{#if toilet}
-		<div class="toiletParent">
-			
-			<img src="/toilet-banner.png" class="toilet-banner" alt="The Toilet Bowl" />
-
-			<div class="toiletBowl">
-				<img src="{getAvatarFromTeamManagers(leagueTeamManagers, toilet, year)}" class="toiletWinner clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: toilet})} alt="toilet bowl winner" />
-				<img src="/toilet-bowl-2.png" class="toilet" alt="toilet bowl" />
-			</div>
-			<span class="genLabel clickable" onclick={() => gotoManager({year, leagueTeamManagers, rosterID: toilet})}>{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, toilet)}</span>
-		</div>
-	{/if}
+    <!-- Toilet Bowl -->
+    {#if toilet}
+        <div class="toilet-section">
+            <h3 class="toilet-title">🏆 Longwell Cup</h3>
+            <img src="{getAvatarFromTeamManagers(leagueTeamManagers, toilet, year)}" alt="Longwell Cup Winner" class="toilet-avatar clickable" on:click={() => gotoManager({year, leagueTeamManagers, rosterID: toilet})}>
+            <div class="toilet-name clickable" on:click={() => gotoManager({year, leagueTeamManagers, rosterID: toilet})}>{@html getNestedTeamNamesFromTeamManagers(leagueTeamManagers, year, toilet)}</div>
+        </div>
+    {/if}
 </div>

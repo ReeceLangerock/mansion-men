@@ -57,6 +57,17 @@ export const getLeagueTeamManagers = async () => {
   // supplement teamManagersMap with ESPN data
   response.teamManagersMap[2024] = response.teamManagersMap[2025];
   response.teamManagersMap[2023] = response.teamManagersMap[2025];
+  response.teamManagersMap[2022] = response.teamManagersMap[2025];
+  response.teamManagersMap[2021] = response.teamManagersMap[2025];
+  response.teamManagersMap[2020] = response.teamManagersMap[2025];
+  response.teamManagersMap[2019] = response.teamManagersMap[2025];
+  response.teamManagersMap[2018] = response.teamManagersMap[2025];
+  response.teamManagersMap[2017] = response.teamManagersMap[2025];
+  response.teamManagersMap[2016] = response.teamManagersMap[2025];
+  response.teamManagersMap[2015] = response.teamManagersMap[2025];
+  response.teamManagersMap[2014] = response.teamManagersMap[2025];
+  response.teamManagersMap[2013] = response.teamManagersMap[2025];
+  response.teamManagersMap[2012] = response.teamManagersMap[2025];
 
   teamManagersStore.update(() => response);
 
