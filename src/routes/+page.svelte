@@ -70,7 +70,7 @@
     }
 
     .homeBanner {
-        background-color: var(--blueOne);
+        background-color: var(--primaryColor);
         color: #fff;
         padding: 0.5em 0;
         font-weight: 500;

@@ -51,8 +51,8 @@
         text-align: center;
         padding: 0.7em 0 1em;
         background-color: var(--fff);
-        border-radius: 0 0 0 40px;
-        border-left: 2px solid var(--blueOne);
+        border-radius: 0 0 6px 40px;
+        border-left: 2px solid var(--primaryColor);
         border-right: 1px solid var(--ddd);
         margin-bottom: 3em;
     }
@@ -71,8 +71,8 @@
 
     tbody {
         background-color: var(--fff);
-        border-top: 2px solid var(--blueOne);
-        border-left: 2px solid var(--blueOne);
+        border-top: 2px solid var(--ddd);
+        border-left: 2px solid var(--primaryColor);
         border-right: 1px solid var(--ddd);
     }
 
